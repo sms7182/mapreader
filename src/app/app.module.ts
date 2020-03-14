@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {APP_BASE_HREF} from '@angular/common';
 import { FolderComponent } from './folder/folder.component';
-import {MatTreeModule, MatInputModule, MatFormFieldModule, MatIconModule} from '@angular/material';
+import {MatTreeModule, MatInputModule, MatFormFieldModule, MatIconModule, MatButtonModule} from '@angular/material';
 import {MatCheckboxModule} from '@angular/material';
 import { FileComponent } from './file/file.component'
 
@@ -21,7 +21,8 @@ import { FileComponent } from './file/file.component'
     MatTreeModule,
     MatCheckboxModule,
      MatFormFieldModule,
-    MatInputModule,    MatIconModule,
+     MatButtonModule,
+    MatInputModule,    MatIconModule
   ],
   providers: [{provide: APP_BASE_HREF, useValue: '/'}],
   bootstrap: [AppComponent]
