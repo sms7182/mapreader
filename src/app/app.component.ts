@@ -20,7 +20,27 @@ import {OSM, Vector as VectorSource} from 'ol/source';
 export class AppComponent implements AfterViewInit {
   title = 'my-mapp';
   map:Map;
+  selectNode(event){
+    let file=event;
+    let fileReader = new FileReader();
+    var namesplited= event.name.split('.');
+    let fileType:string='';
+    if(namesplited!==undefined){
+        fileType=namesplited[1]
+       
+    }
+    var rs=fileReader.readAsText(file)
+    fileReader.onload=(e)=>{
+       if(fileType==='wkt'){
+        console.log(fileReader.result)
+     
+       }
+       else{
 
+       }
+    }
+    
+  }
   selectFile(files){
     
     let fileReader = new FileReader();

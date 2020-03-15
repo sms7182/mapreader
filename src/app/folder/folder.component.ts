@@ -1,4 +1,4 @@
-import { Component, OnInit,  Injectable } from '@angular/core';
+import { Component, OnInit,  Injectable, ViewChild, Output, EventEmitter } from '@angular/core';
 import {SelectionModel} from '@angular/cdk/collections';
 import {FlatTreeControl} from '@angular/cdk/tree';
 
@@ -96,13 +96,16 @@ export class FolderComponent implements OnInit {
 
   tree:TodoItemNode;
   fileContent:string=''
-  allfile:File[];
+  allfile:File[]=[];
+  @Output() 
+  fileEvent:EventEmitter<File> =new EventEmitter<File>();
+  
   selectfolder(files){
    
-   this.allfile=files;
+  
      this.tree=new TodoItemNode()
     for(var i=0;i<files.length;i++){
-   
+      this.allfile.push(files[i]) 
     
       var path=files[i].webkitRelativePath.split('/');
       if(this.tree.item!==path[0]){
@@ -112,8 +115,8 @@ export class FolderComponent implements OnInit {
       for(var j=1;j<path.length;j++){
        temp= this.populateTree(path[j],temp);
       }
-     // temp.file=files[i];
-      
+     
+     
     }
    
     var tempTree:TodoItemNode[]=[];
@@ -172,13 +175,25 @@ export class FolderComponent implements OnInit {
     this.nestedNodeMap.set(node, flatNode);
     return flatNode;
   }
+
   descendantsAllSelected(node: TodoItemFlatNode): boolean {
-   
+  
     const descendants = this.treeControl.getDescendants(node);
     const descAllSelected = descendants.every(child =>
       this.checklistSelection.isSelected(child)
     );
+
     return descAllSelected;
+  }
+  checkNode(node:TodoItemFlatNode){
+   
+   
+   
+   let tempfile= this.allfile.find(it=>it.name===node.item);
+   if(tempfile!==undefined){
+     this.fileEvent.emit(tempfile);  
+   
+   }
   }
 
   descendantsPartiallySelected(node: TodoItemFlatNode): boolean {
@@ -193,45 +208,44 @@ export class FolderComponent implements OnInit {
     this.checklistSelection.isSelected(node)
       ? this.checklistSelection.select(...descendants)
       : this.checklistSelection.deselect(...descendants);
-   if(this.checklistSelection.isSelected(node)){
-    let polygon:string|ArrayBuffer;
-    let fileReader = new FileReader();
+  //  if(this.checklistSelection.isSelected(node)){
+  //   let polygon:string|ArrayBuffer;
+  //   let fileReader = new FileReader();
     
-    var raster = new TileLayer({
-      source: new OSM()
-    });
-    debugger;
-   var filet= this.allfile.find(({name})=>{name===node.item});
-   console.log(filet)
-     var rs=fileReader.readAsText(filet)
-     fileReader.onload = (e) => {
-      console.log(fileReader.result);
-      //polygon=fileReader.result;
-       var wkt=  fileReader.result
-       var format=new WKT();
-       var feature=format.readFeature(wkt,{
-        dataProjection: 'EPSG:4326',
-        featureProjection: 'EPSG:3857'
-       })
+  //   var raster = new TileLayer({
+  //     source: new OSM()
+  //   });
+  //   debugger;
+  //  var filet= this.allfile.find(({name})=>{name===node.item});
+  //  console.log(filet)
+  //    var rs=fileReader.readAsText(filet)
+  //    fileReader.onload = (e) => {
+  //     console.log(fileReader.result);
+  //     //polygon=fileReader.result;
+  //      var wkt=  fileReader.result
+  //      var format=new WKT();
+  //      var feature=format.readFeature(wkt,{
+  //       dataProjection: 'EPSG:4326',
+  //       featureProjection: 'EPSG:3857'
+  //      })
        
-    var vector = new VectorLayer({
-    source: new VectorSource({
-     features: [feature]
-    })
-    });
+  //   var vector = new VectorLayer({
+  //   source: new VectorSource({
+  //    features: [feature]
+  //   })
+  //   });
 
     
-
-var map = new Map({
-  layers: [raster, vector],
-  target: 'map',
-  view: new View({
-    center: [2952104.0199, -3277504.823],
-    zoom: 4
-  })
-});
-     }
-   }
+  //   var map = new Map({
+  //      layers: [raster, vector],
+  //     target: 'map',
+  //       view: new View({
+  //         center: [2952104.0199, -3277504.823],
+  //       zoom: 4
+  //      })
+  //     });
+  //     }
+  //   }
   
     descendants.every(child =>
       this.checklistSelection.isSelected(child)

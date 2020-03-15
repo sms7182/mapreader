@@ -1,6 +1,8 @@
 
-<app-folder></app-folder>
-<!--input #filein  id='fileinput' type='file' (change)='selectFile(filein.files)'>
-<body>
+<app-folder (fileEvent)='selectNode($event)'></app-folder>
+
+<!--input #filein  id='fileinput' type='file' (change)='selectFile(filein.files)'-->
+
+<!--body>
     <div id="map" class="map"></div>
 </body-->
